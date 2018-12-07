@@ -1,7 +1,10 @@
 -------
 -- 快速排序
 -- 
--- 左右指针法、挖坑法
+-- 左右指针法、挖坑法、前后指针法
+-- 最优情况:当关键值位于序列中间时
+-- 最坏情况:对已序的序列进行排序
+-- 时间复杂度: O(n^2)最差 O(n*log(n))最好
 --
 
 local function swap(a, s, e)
@@ -67,12 +70,40 @@ swap(a, pre, right)
 return pre
 end
 
+-- 三数取中
+function getMid(a, left, right)
+	local mid = math.floor(left + (right - left)/2)
+	if a[left]<=a[right] then
+		if a[mid] < a[left] then
+			return left
+		elseif a[mid] > a[right] then
+			return right
+		else
+			return mid
+		end
+	else
+		if a[mid] < a[right] then
+			return right
+		elseif a[mid] > a[left] then
+			return left
+		else
+			return mid
+		end
+	end
+end
+
 local function quickSort(a, left, right)
 	if left >= right then
         return
     end
 	--local index = leftRightPoint(a, left, right)
 	--local index = digHole(a, left, right)
+	
+	local mid = getMid(a, left, right)
+	if a[mid] ~= a[right] then
+		swap(a, mid, right)
+	end	
+
 	local index = curPreSort(a, left, right)
 	quickSort( a, left, index-1 )
     quickSort( a, index+1, right )
